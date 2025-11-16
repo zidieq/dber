@@ -3,7 +3,7 @@ import { Modal, Button, Space, Popconfirm } from '@arco-design/web-react';
 import graphState from '@/hooks/use-graph-state';
 
 /**
- * It renders a modal that allows the user to change the relation of a link or delete the link
+ * 它渲染了一个模态窗口，允许用户更改链接的关系或删除该链接
  * @param props - { editingLink, setEditingLink, setLinkDict }
  * @returns  Modal component
  */
@@ -83,7 +83,7 @@ export default function LinkModal(props) {
                     </Button>
                 </Space>
                 <Popconfirm
-                    title="Are you sure to delete this path?"
+                    title="确定要删除该关联关系吗?"
                     onOk={() => {
                         removeLink();
                     }}

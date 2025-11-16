@@ -10,7 +10,11 @@ import {
 } from '@arco-design/web-react/icon';
 
 import graphState from '@/hooks/use-graph-state';
-
+/**
+ * ER图左侧的表格导航栏组件
+ * @param {*} param0
+ * @returns
+ */
 export default function TableNav({ onTableSelected, tableSelectedId, setTableSelectId }) {
     const [collapsed, setCollapsed] = useState(false);
     const [tableList, setTableList] = useState([]);
@@ -66,7 +70,7 @@ export default function TableNav({ onTableSelected, tableSelectedId, setTableSel
         <div className="left-table-nav">
             <div className="table-nav-title">
                 <div>
-                    Tables
+                    表格列表
                     <span className="table-nav-count">({tableList.length})</span>
                 </div>
                 <div>
@@ -97,7 +101,7 @@ export default function TableNav({ onTableSelected, tableSelectedId, setTableSel
                                 style={{ width: 180 }}
                                 allowClear
                                 defaultValue={filterValue}
-                                placeholder="input table name"
+                                placeholder="请输入表格名称"
                                 onPressEnter={e => handlerFilter(e)}
                                 onClear={() => {
                                     setTableList(tables);

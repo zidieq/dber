@@ -10,7 +10,7 @@ import tableModel from '@/hooks/table-model';
 const TabPane = Tabs.TabPane;
 
 /**
- * It's a modal that allows you to import a graph from a string
+ * 这是一个允许你从字符串导入图的模态窗口
  * @returns Modal component
  */
 export default function ImportModal({ showModal, onCloseModal, cb = p => {} }) {

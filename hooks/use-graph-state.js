@@ -29,7 +29,7 @@ function useGraphState() {
     const { id } = router.query;
     // const id = new URLSearchParams(global?.location?.search).get('id');
 
-    /* A callback function that is used to update the viewbox of the svg. */
+    /* 用于更新 SVG 视口（viewBox）的回调函数 */
     const resizeHandler = useCallback(() => {
         setBox(state => {
             return {
@@ -58,7 +58,7 @@ function useGraphState() {
     }, []);
 
     /**
-     * It takes a graph object and sets the state of the app to match the graph object
+     * 它接受一个 graph 对象，并将应用的状态设置为与该对象相匹配。
      */
     const loadGraph = graph => {
         if (!graph) return resizeHandler();
@@ -89,17 +89,18 @@ function useGraphState() {
         }
 
         /**
-         * > If the graph is in the local storage, and the graph in the local storage is newer than the
-         * graph in the database, then ask the user if they want to load the graph from the local
-         * storage
+         *如果本地存储中存在该图，且本地存储中的图比数据库中的更新，则提示用户是否要从本地存储加载该图。
          */
         const initGraph = async () => {
             setInit(true);
-
+            // 从数据库获取图数据
             const graph = await getGraph(id);
             loadGraph(graph);
 
+            // 检查本地存储中的图数据
             const storageGraph = JSON.parse(window.localStorage.getItem(id));
+
+            // 如果本地存储中的图数据比数据库中的更新，则提示用户是否要加载本地存储中的图数据
             if (graph?.updatedAt < storageGraph?.updatedAt) {
                 Modal.confirm({
                     title: 'Unsaved changes',
@@ -122,6 +123,7 @@ function useGraphState() {
         initGraph();
     }, [id]);
 
+    // 自动将状态保存到本地存储
     useEffect(() => {
         if (init) setInit(false);
         if (!id || init || !Object.keys(tableDict).length) return;
@@ -139,6 +141,7 @@ function useGraphState() {
         );
     }, [box, linkDict, tableDict, name]);
 
+    // 应用主题
     useEffect(() => {
         const t = theme || window.localStorage.getItem('theme') || 'light';
         t === 'dark'

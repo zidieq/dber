@@ -49,22 +49,32 @@ const tableModel = () => {
             });
         }
     };
-
+    // 计算新表格位置
     const calcXY = (start, tables = tableList) => {
+        // 默认添加在最后
         const index = start || Math.max(1, tables.length);
         let x, y;
+        // 第一行第一个表格
         if (!tables.length) {
             x = box.x + 196 + 72;
             y = box.y + 72;
         } else {
+            // 计算新表格位置
             if (index < tableRowNumbers) {
+                // 同一行
                 const lastTable = tables[index - 1];
+                // 在最后一个表格后面添加
                 x = lastTable.x + tableWidth + tableMarginLeft;
+                // 同一行y不变
                 y = lastTable.y;
             } else {
+                // 换行添加
                 const lastTable = tables[index - tableRowNumbers];
+                // 在上一行对应位置表格下面添加
                 const { fields } = lastTable;
+                // x不变
                 x = lastTable.x;
+                // y增加表格高度
                 y =
                     lastTable.y +
                     fields.length * fieldHeight +
@@ -77,7 +87,7 @@ const tableModel = () => {
     };
 
     /**
-     * It creates a new table object and adds it to the table dictionary
+     * 它会创建一个新的表对象，并将其添加到表字典中。
      */
     const addTable = () => {
         const [x, y] = calcXY();
@@ -104,8 +114,7 @@ const tableModel = () => {
     };
 
     /**
-     * It takes a table object, updates the tableDict state with the new table object, and then sets
-     * the editingTable state to null
+     *它接受一个表对象，用新的表对象更新tableDict状态，然后将editingTable状态设置为null
      */
     const updateTable = table => {
         if (table) {
@@ -121,6 +130,7 @@ const tableModel = () => {
         }
         setLinkDict(state => {
             const newState = { ...state };
+            // 删除所有连接到当前表格已删除字段的链接
             Object.keys(newState).forEach(key => {
                 if (
                     newState[key].endpoints.some(
@@ -138,15 +148,16 @@ const tableModel = () => {
     };
 
     /**
-     * It removes a table from the table dictionary, and removes any links that are connected to that table
+     * 它从表字典中删除表，并删除连接到该表的所有链接
      */
     const removeTable = tableId => {
+        // 从表字典中删除表
         setTableDict(state => {
             const newState = { ...state };
             delete newState[tableId];
             return newState;
         });
-
+        // 删除连接到该表的所有链接
         setLinkDict(state => {
             const newState = { ...state };
             Object.keys(newState).forEach(key => {
@@ -159,14 +170,17 @@ const tableModel = () => {
 
         setEditingTable(null);
     };
-
+    // 在表格中添加字段
     const addField = (table, index) => {
         table.fields.splice(index + 1, 0, {
             id: nanoid(),
-            name: 'new item' + table.fields.length,
+            name: '新字段' + table.fields.length,
+            nameCh: '',
             type: 'VARCHAR',
+            valueLength: '10',
             unique: false,
         });
+        // 更新表格状态
         setTableDict(state => {
             return {
                 ...state,
@@ -179,9 +193,10 @@ const tableModel = () => {
         setEditingField({ field: table.fields[index + 1], table });
         setAddingField({ index: index + 1, table });
     };
-
+    // 从表格中删除字段
     const removeField = (table, index) => {
         const [filed] = table.fields.splice(index, 1);
+        // 更新表格状态
         setTableDict(state => {
             return {
                 ...state,
@@ -191,6 +206,7 @@ const tableModel = () => {
                 },
             };
         });
+        // 删除连接到该字段的所有链接
         setLinkDict(state => {
             const newState = { ...state };
             Object.keys(newState).forEach(key => {
@@ -201,7 +217,7 @@ const tableModel = () => {
             return newState;
         });
     };
-
+    // 应用版本
     const applyVersion = async item => {
         let graph;
         if (item === 'currentVersion') {

@@ -1,19 +1,3 @@
-const fieldTypes = [
-    'INTEGER',
-    'SMALLINT',
-    'BIGINT',
-    'NUMERIC',
-    'FLOAT',
-    'DOUBLE',
-    'BOOLEAN',
-    'CHARACTER',
-    'VARCHAR',
-    'TEXT',
-    'DATE',
-    'TIME',
-    'TIMESTAMP',
-    'JSON',
-    'BLOB',
-];
+const fieldTypes = ['INTEGER', 'BIGINT', 'DOUBLE', 'VARCHAR', 'TEXT', 'JSON', 'BLOB'];
 
 export default fieldTypes;

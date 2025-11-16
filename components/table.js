@@ -12,44 +12,44 @@ import {
 import { themes, tableWidth, titleHeight, commentHeight, fieldHeight } from '@/config/settings';
 import graphState from '@/hooks/use-graph-state';
 import tableModel from '@/hooks/table-model';
-
+// 表格字段的鼠标hover提示组件
 const RenderTableTips = ({ field }) => (
     <div className="table-tips">
         <div className="head">
             <span className="field-name">{field.name}</span>
-            <span className="field-type">{field.type}</span>
+            <span className="field-type">{field.nameCh}</span>
         </div>
         <div className="content">
             <Space wrap size={4}>
                 {field.pk && (
                     <Tag size="small" color="gold">
-                        PRIMARY
+                        主键
                     </Tag>
                 )}
                 {field.unique && (
                     <Tag size="small" color="green">
-                        UNIQUE
+                        唯一
                     </Tag>
                 )}
                 {field.not_null && (
                     <Tag size="small" color="magenta">
-                        NOT NULL
+                        非空
                     </Tag>
                 )}
                 {field.increment && (
                     <Tag size="small" color="lime">
-                        INCREMENT
+                        自增
                     </Tag>
                 )}
             </Space>
 
             <div className="field-item dbdefault">
-                <span>DEFAULT:</span>
-                {field.dbdefault || <span className="empty-value">(Unset)</span>}
+                <span>默认值:</span>
+                {field.dbdefault || <span className="empty-value">(无)</span>}
             </div>
             <div className="field-item note">
-                <span>COMMENT:</span>
-                {field.note || <span className="empty-value">(No Comment)</span>}
+                <span>备注:</span>
+                {field.note || <span className="empty-value">(无)</span>}
             </div>
         </div>
     </div>
@@ -79,6 +79,7 @@ export default function Table(props) {
 
     // 12: box-shadow
     const height = table.fields.length * fieldHeight + titleHeight + commentHeight + 12;
+    console.dir(table);
     return (
         <foreignObject
             x={table.x}
@@ -106,6 +107,7 @@ export default function Table(props) {
                         lineHeight: `${titleHeight}px`,
                     }}
                 >
+                    {/* ER图中，表格标题部分 */}
                     <span className="table-name">{table.name}</span>
 
                     {editable && (
@@ -202,9 +204,9 @@ export default function Table(props) {
                             </Popover>
                             <Popconfirm
                                 position="tr"
-                                title="Are you sure you want to delete this table?"
-                                okText="Yes"
-                                cancelText="No"
+                                title="确定删除当前表格吗?"
+                                okText="是"
+                                cancelText="否"
                                 onOk={() => removeTable(table.id)}
                             >
                                 <Button status="danger" size="mini" icon={<IconDelete />} />
@@ -236,6 +238,7 @@ export default function Table(props) {
                                     className="start-grip grip"
                                     onMouseDown={onGripMouseDown}
                                 ></div>
+                                {/* ER图中字段列表部分 */}
                                 <div className="field-content">
                                     <div>
                                         {field.name}
@@ -262,9 +265,12 @@ export default function Table(props) {
                                             />
                                         )}
                                     </div>
-                                    <div className="field-type">{field.type}</div>
+                                    <div className="field-type">
+                                        {field.nameCh || field.comment || field.type}
+                                    </div>
                                 </div>
                                 <div className="grip-setting">
+                                    {/* ER图中，表格字段行中的按钮：编辑、新增、删除 */}
                                     <Button
                                         type="secondary"
                                         className="grip-setting-btn"
@@ -285,9 +291,9 @@ export default function Table(props) {
                                     />
                                     <Popconfirm
                                         position="tr"
-                                        title="Are you sure you want to delete this field?"
-                                        okText="Yes"
-                                        cancelText="No"
+                                        title="确定要删除该字段吗?"
+                                        okText="是"
+                                        cancelText="否"
                                         onOk={() => removeField(table, index)}
                                     >
                                         <Button

@@ -5,7 +5,7 @@ import graphState from '@/hooks/use-graph-state';
 import tableModel from '@/hooks/table-model';
 
 /**
- * It renders a form for editing a table
+ * 它渲染了一个用于编辑表格的表单。
  * @param props - The props passed to the component.
  * @returns A TableForm component
  */
@@ -27,7 +27,7 @@ export default function FieldForm(props) {
         <Modal
             title={
                 <div style={{ textAlign: 'left' }}>
-                    Edit
+                    编辑字段：
                     {table ? (
                         <Tag color="arcoblue" style={{ margin: '0 4px' }}>
                             {table.name}
@@ -35,7 +35,6 @@ export default function FieldForm(props) {
                     ) : (
                         ''
                     )}
-                    Field
                 </div>
             }
             visible={!!table}
@@ -58,8 +57,8 @@ export default function FieldForm(props) {
                 form.resetFields();
             }}
             style={{ width: 580 }}
-            okText="Commit"
-            cancelText="Cancel"
+            okText="提交"
+            cancelText="取消"
         >
             {field && (
                 <Form
@@ -76,7 +75,7 @@ export default function FieldForm(props) {
                     <Space direction="vertical" style={{ width: '100%' }}>
                         <Space className="table-form-item">
                             <Form.Item
-                                label="Name"
+                                label="名称"
                                 field="name"
                                 initialValue={field.name}
                                 rules={[
@@ -98,7 +97,16 @@ export default function FieldForm(props) {
                                 <Input allowClear />
                             </Form.Item>
                             <Form.Item
-                                label="Type"
+                                label="中文名"
+                                field="nameCh"
+                                initialValue={field.nameCh || ''}
+                            >
+                                <Input allowClear />
+                            </Form.Item>
+                        </Space>
+                        <Space className="table-form-item">
+                            <Form.Item
+                                label="类型"
                                 field="type"
                                 initialValue={field.type}
                                 rules={[
@@ -110,13 +118,16 @@ export default function FieldForm(props) {
                             >
                                 <AutoComplete data={fieldTypes}></AutoComplete>
                             </Form.Item>
+                            <Form.Item label="长度" field="valueLength" initialValue="10">
+                                <Input allowClear />
+                            </Form.Item>
                         </Space>
                         <Space className="table-form-item">
-                            <Form.Item label="Comment" field="note" initialValue={field.note || ''}>
+                            <Form.Item label="备注" field="note" initialValue={field.note || ''}>
                                 <Input allowClear placeholder="note" />
                             </Form.Item>
                             <Form.Item
-                                label="Default"
+                                label="默认值"
                                 field="dbdefault"
                                 initialValue={field.dbdefault || ''}
                             >
@@ -124,16 +135,16 @@ export default function FieldForm(props) {
                             </Form.Item>
                         </Space>
                         <Space className="table-form-item">
-                            <Form.Item noStyle field="pk" initialValue={field.pk}>
+                            <Form.Item noStyle field="主键" initialValue={field.pk}>
                                 <Checkbox defaultChecked={field.pk}>Primary</Checkbox>
                             </Form.Item>
-                            <Form.Item noStyle field="unique" initialValue={field.unique}>
+                            <Form.Item noStyle field="唯一" initialValue={field.unique}>
                                 <Checkbox defaultChecked={field.unique}>Unique</Checkbox>
                             </Form.Item>
-                            <Form.Item noStyle field="not_null" initialValue={field.not_null}>
+                            <Form.Item noStyle field="非空" initialValue={field.not_null}>
                                 <Checkbox defaultChecked={field.not_null}>Not Null</Checkbox>
                             </Form.Item>
-                            <Form.Item noStyle field="increment" initialValue={field.increment}>
+                            <Form.Item noStyle field="自增" initialValue={field.increment}>
                                 <Checkbox defaultChecked={field.increment}>Increment</Checkbox>
                             </Form.Item>
                         </Space>

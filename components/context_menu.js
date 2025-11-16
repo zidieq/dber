@@ -10,12 +10,12 @@ export default function ContextMenu({ setShowModal, children }) {
     const menus = [
         {
             key: 'N',
-            title: 'Add New Table',
+            title: '添加表格',
             action: () => addTable(),
         },
         {
             key: 'I',
-            title: 'Import Table',
+            title: '导入表格',
             action: () => setShowModal('import'),
         },
         {
@@ -23,12 +23,12 @@ export default function ContextMenu({ setShowModal, children }) {
         },
         {
             key: 'S',
-            title: 'Save Change',
+            title: '保存变更',
             action: () => updateGraph(),
         },
         {
             key: 'E',
-            title: 'Export Database',
+            title: '导出',
             action: () => setShowModal('export'),
         },
     ];

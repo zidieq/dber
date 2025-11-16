@@ -19,16 +19,14 @@ import tableModel from '@/hooks/table-model';
 import graphState from '@/hooks/use-graph-state';
 
 /**
- * It takes the current fields array, checks if the current index is less than the length of the array,
- * and if so, swaps the current index with the next index
+ * 它取当前的 fields 数组，检查当前索引是否小于数组长度；如果是，则将该索引处的元素与下一个索引处的元素互换。
  * @param props - The props passed to the component
  * @param ref - This is a reference to the form element.
  * @returns A React component
  */
 function TableFormItem(props) {
     /**
-     * If the index of the current field is greater than 0, then swap the current field with the field
-     * above it
+     * 如果当前字段的索引大于 0，则将当前字段与上方的字段互换。
      */
     const moveUp = () => {
         props.setFields(fields => {
@@ -45,8 +43,7 @@ function TableFormItem(props) {
     };
 
     /**
-     * It takes the current fields array, checks if the current index is less than the length of the
-     * array, and if so, swaps the current index with the next index
+     * 它取当前的 fields 数组，检查当前索引是否小于数组长度（即不是最后一项），如果是，则将该索引处的元素与下一个元素互换。
      */
     const moveDown = () => {
         props.setFields(fields => {
@@ -94,13 +91,13 @@ function TableFormItem(props) {
             <Space direction="vertical" style={{ width: '100%' }}>
                 <Space className="table-form-item">
                     <Form.Item
-                        label="Name"
+                        label="名称"
                         field={`${index}.name`}
                         initialValue={field.name}
                         rules={[
                             {
                                 required: true,
-                                message: 'Please enter field name',
+                                message: '请输入字段名称',
                             },
                             {
                                 validator: (value, cb) => {
@@ -116,29 +113,38 @@ function TableFormItem(props) {
                         <Input allowClear />
                     </Form.Item>
                     <Form.Item
-                        label="Type"
+                        label="中文名"
+                        field={`${index}.nameCh`}
+                        initialValue={field.note || ''}
+                    >
+                        <Input allowClear />
+                    </Form.Item>
+                </Space>
+                <Space className="table-form-item">
+                    <Form.Item
+                        label="类型"
                         field={`${index}.type`}
                         initialValue={field.type}
                         rules={[
                             {
                                 required: true,
-                                message: 'Please choose field type',
+                                message: '请选择字段类型',
                             },
                         ]}
                     >
                         <AutoComplete data={fieldTypes}></AutoComplete>
                     </Form.Item>
+                    <Form.Item label="长度" field={`${index}.valueLength`} initialValue="10">
+                        <Input allowClear />
+                    </Form.Item>
                 </Space>
+
                 <Space className="table-form-item">
-                    <Form.Item
-                        label="Comment"
-                        field={`${index}.note`}
-                        initialValue={field.note || ''}
-                    >
+                    <Form.Item label="注释" field={`${index}.note`} initialValue={field.note || ''}>
                         <Input allowClear placeholder="note" />
                     </Form.Item>
                     <Form.Item
-                        label="Default"
+                        label="默认值"
                         field={`${index}.dbdefault`}
                         initialValue={field.dbdefault || ''}
                     >
@@ -147,37 +153,37 @@ function TableFormItem(props) {
                 </Space>
                 <Space className="table-form-item">
                     <Form.Item noStyle field={`${index}.pk`} initialValue={field.pk}>
-                        <Checkbox defaultChecked={field.pk}>Primary</Checkbox>
+                        <Checkbox defaultChecked={field.pk}>主键</Checkbox>
                     </Form.Item>
                     <Form.Item noStyle field={`${index}.unique`} initialValue={field.unique}>
-                        <Checkbox defaultChecked={field.unique}>Unique</Checkbox>
+                        <Checkbox defaultChecked={field.unique}>唯一</Checkbox>
                     </Form.Item>
                     <Form.Item noStyle field={`${index}.not_null`} initialValue={field.not_null}>
-                        <Checkbox defaultChecked={field.not_null}>Not Null</Checkbox>
+                        <Checkbox defaultChecked={field.not_null}>非空</Checkbox>
                     </Form.Item>
                     <Form.Item noStyle field={`${index}.increment`} initialValue={field.increment}>
-                        <Checkbox defaultChecked={field.increment}>Increment</Checkbox>
+                        <Checkbox defaultChecked={field.increment}>自增</Checkbox>
                     </Form.Item>
                 </Space>
 
                 <Space className="table-form-item">
                     <Button onClick={moveUp} type="primary" size="small" long>
-                        ↑ Move up
+                        ↑ 上移
                     </Button>
                     <Button onClick={moveDown} type="primary" size="small" long>
-                        ↓ Move down
+                        ↓ 下移
                     </Button>
 
                     <Popconfirm
-                        title="Are you sure delete this field?"
+                        title="确定要删除这个字段吗?"
                         onOk={() => {
                             props.removeItem(props.field.id);
                         }}
-                        okText="Yes"
-                        cancelText="No"
+                        okText="是"
+                        cancelText="否"
                     >
                         <Button status="danger" size="small" long>
-                            Remove field
+                            删除字段
                         </Button>
                     </Popconfirm>
                     <Button
@@ -187,7 +193,7 @@ function TableFormItem(props) {
                         size="small"
                         long
                     >
-                        + Add field after
+                        + 添加字段
                     </Button>
                 </Space>
             </Space>
@@ -202,7 +208,7 @@ function TableBaseForm() {
     if (!editingTable) return null;
     return (
         <>
-            <Form.Item label="Table Name" labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
+            <Form.Item label="表格名称" labelCol={{ span: 5 }} wrapperCol={{ span: 19 }}>
                 <Grid.Row align="center" gutter={8}>
                     <Grid.Col span={18}>
                         <Form.Item
@@ -212,14 +218,14 @@ function TableBaseForm() {
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Please enter table name',
+                                    message: '请输入表格名称',
                                 },
                                 {
                                     validator: (value, cb) => {
                                         return tableList
                                             .filter(item => item.id !== editingTable.id)
                                             .find(item => item.name === value)
-                                            ? cb('have same name table')
+                                            ? cb('表格名称重复')
                                             : cb();
                                     },
                                 },
@@ -231,13 +237,13 @@ function TableBaseForm() {
                     <Grid.Col span={6}>
                         <Popconfirm
                             position="br"
-                            title="Are you sure you want to delete this table?"
-                            okText="Yes"
-                            cancelText="No"
+                            title="确定要删除当前表格吗?"
+                            okText="是"
+                            cancelText="否"
                             onOk={() => removeTable(editingTable.id)}
                         >
                             <Button type="outline" status="warning">
-                                Delete table
+                                删除表格
                             </Button>
                         </Popconfirm>
                     </Grid.Col>
@@ -245,7 +251,7 @@ function TableBaseForm() {
             </Form.Item>
 
             <Form.Item
-                label="Table Comment"
+                label="中文名"
                 field="note"
                 labelCol={{ span: 5 }}
                 wrapperCol={{ span: 19 }}
@@ -257,11 +263,11 @@ function TableBaseForm() {
     );
 }
 
-/* A forwardRef function that is used to forward the ref to the child component. */
+/* 这是一个用于将 ref 转发给子组件的 forwardRef 函数 */
 // const TableRefFormItem = forwardRef(TableFormItem);
 
 /**
- * It renders a form for editing a table
+ *它渲染了一个用于编辑表格的表单
  * @param props - The props passed to the component.
  * @returns A TableForm component
  */
@@ -292,7 +298,7 @@ export default function TableForm(props) {
         const newState = [...fields];
         newState.splice(index + 1, 0, {
             id: nanoid(),
-            name: 'new item' + newState.length,
+            name: '字段' + newState.length,
             type: '',
             unique: false,
         });
@@ -306,7 +312,7 @@ export default function TableForm(props) {
         });
     };
 
-    // Drag and drop
+    // 拖放
     const [draggingId, setDraggingId] = useState(false);
     const [draggingIndex, setDraggingIndex] = useState(false);
     const [droppingId, setDroppingId] = useState(false);
@@ -368,12 +374,12 @@ export default function TableForm(props) {
     return (
         <Drawer
             width={620}
-            title="Edit Table"
+            title="编辑表格"
             visible={!!editingTable}
-            okText="Commit"
+            okText="提交"
             autoFocus={false}
             onOk={() => form.submit()}
-            cancelText="Cancel"
+            cancelText="取消"
             onCancel={() => setEditingTable(false)}
             escToExit={!props.formChange}
             maskClosable={!props.formChange}
@@ -422,7 +428,7 @@ export default function TableForm(props) {
                         size="small"
                         long
                     >
-                        + Add field
+                        + 新增字段
                     </Button>
                 )}
             </Form>

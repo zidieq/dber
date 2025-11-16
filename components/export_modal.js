@@ -8,7 +8,7 @@ import exportSQL from '@/utils/export-sql';
 const TabPane = Tabs.TabPane;
 
 /**
- * It's a modal that displays the command to be exported
+ * 这是一个用于显示要导出的命令的模态窗口。
  * @returns Modal component
  */
 export default function ExportModal({ showModal, onCloseModal }) {
